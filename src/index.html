@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="./spin.min.js?v=1.2.6"></script>
+  <style>
+    #loading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+    }
+
+    body {
+      background: #222222;
+      margin: 0;
+    }
+
+    .img_line {
+      clear: both;
+
+      width: 150%;
+    }
+
+    .img_frame {
+      width: 25%;
+      padding-bottom: 5%;
+      float: left;
+    }
+
+    .post_img {
+      width: 95%;
+    }
+
+    .searchBar {
+      position: fixed;
+      background-color: #222222;
+      z-index: 900;
+      right: 0px;
+      left: 0px;
+      top: 0px;
+      height: 80px;
+    }
+
+    .logo_img {
+      position: fixed;
+      z-index: 900;
+      top: 0px;
+      height: 80px;
+      width: 484px;
+      left: -32px;
+    }
+
+    #search_input {
+      border: 2px solid #ffd9a1;
+      color: #a58066;
+      margin: 0px;
+      padding-left: 5px;
+      font-size: 1.2em;
+      position: fixed;
+      z-index: 900;
+      height: 26px;
+      width: 315px;
+      left: 440px;
+      top: 40px;
+    }
+
+    .search_button {
+      border: 0;
+      margin: 0px;
+      padding: 0px;
+      position: fixed;
+      z-index: 900;
+      font-weight: bold;
+      background-color: #a58066;
+      color: #fdf0dd;
+      height: 32px;
+      line-height: 32px;
+      text-align: center;
+      font-size: 16px;
+      width: 100px;
+      left: 760px;
+      top: 40px;
+
+    }
+  </style>
+  <script>
+    var reload = function (img) {
+      console.log("Image loading faild, retry")
+      var p = img.src.split('?');
+      if (p.length > 1) {
+        if (p[1].length < 7) {
+          img.src = img.src + '1';
+        }
+        else {
+          console.log("Give up", img.src);
+        }
+      } else {
+        img.src = img.src + '?rt=1';
+      }
+      console.log(img.src);
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <div class="searchBar">
+    <img src="../img/konachan_net_sm_std.png" class="logo_img">
+    <input id="search_input" spellcheck="false" autofocus>
+    <button id="search_button" class="search_button">Search</div>
+  </div>
+
+  <div style="height: 100px;">
+  </div>
+
+  <div id="post_display" style="margin:8px">
+    <div v-bind:hidden="isPreview">
+      <img id="big_image" v-bind:src="curPost.file_url">
+      <div>{{ curPost.id }}</div>
+      <div>{{ curPost.author }}</div>
+      <button v-on:click="viewBigImage()">Return</button>
+    </div>
+    <div v-bind:hidden="!isPreview" class="img_line" v-for="postRow in postRows">
+      <div class="img_frame" v-bind:style="frameStyle" v-for="post in postRow">
+        <img class="post_img" v-bind:src="post.preview_url" onerror="javascript:reload(this)" v-on:click="viewBigImage(post)">
+      </div>
+    </div>
+    <div v-show="isLoading" id="loading"></div>
+  </div>
+  <div id="more"></div>
+  <script>
+    var opts = {
+      lines: 12, // The number of lines to draw
+      length: 10, // The length of each line
+      width: 4, // The line thickness
+      radius: 16, // The radius of the inner circle
+      corners: 1, // Corner roundness (0..1)
+      rotate: 0, // The rotation offset
+      color: '#fff', // #rgb or #rrggbb
+      speed: 1, // Rounds per second
+      trail: 60, // Afterglow percentage
+      shadow: false, // Whether to render a shadow
+      hwaccel: false, // Whether to use hardware acceleration
+      className: 'spinner', // The CSS class to assign to the spinner
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+    };
+    var target = document.getElementById('loading');
+    var spinner = new Spinner(opts).spin(target);
+  </script>
+  <script src="./script.js"></script>
+  <script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </script>
+
+</body>
+
+</html>
