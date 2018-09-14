@@ -3,8 +3,8 @@ const PostData = require('./postdata');
 //const postList = new PostData.PostList();
 const postListManager = new PostData.PostListManager();
 
-const cache = new PostData.PostCache('cache.json');
-cache.load();
+// const cache = new PostData.PostCache('cache.json');
+// cache.load();
 
 const vm = new Vue({
   el: "#post_display",
@@ -18,23 +18,35 @@ const vm = new Vue({
     curPost: {
       file_url: "",
       id: -1,
-      author: "null"
+      author: "null",
+      tags: ""
     }
   },
   methods: {
+
     viewBigImage: function (post) {
       if (post) {
         this.curPost = post;
         this.isPreview = false;
+        document.body.style.overflowY = "hidden";
       }
       else {
         this.isPreview = true;
+        document.body.style.overflowY = "unset";
       }
       console.log(post);
+
     }
   },
 
   computed: {
+    getTags: function () {
+      if (this.curPost && this.curPost.tags) {
+        return this.curPost.tags.replace(/ /g, '<br>');
+      }
+      return ''
+    },
+
     postRows: function () {
       var result = [];
       var i = 0;
@@ -73,11 +85,14 @@ var autoUpdateRow = function () {
 
 
 postListManager.onUpdate = function (mergedList, newList) {
-  vm._data.posts = mergedList;
   vm._data.isLoading = false;
+  if (!mergedList) {
+    return;
+  }
+  vm._data.posts = mergedList;
   var cacheList = newList || mergedList;
-  cache.cache(cacheList);
-  cache.save();
+  // cache.cache(cacheList);
+  // cache.save();
   tryAutoLoadMore();
 }
 
@@ -176,7 +191,7 @@ window.onload = function () {
   })
 
   postListManager.current.getNextBatch();
-  //postList.getCachedPosts(cache);
+  //postListManager.current.getCachedPosts(cache);
 
   var opts = {
     lines: 9, // The number of lines to draw
