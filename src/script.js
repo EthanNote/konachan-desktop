@@ -13,7 +13,8 @@ const vm = new Vue({
     rows: 4,
     frameWidth: 320,
     isLoading: false,
-    isPreview: true,
+    //isPreview: true,
+    //zIndex:-1,
     paddingLeft: 0,
     curPost: {
       file_url: "",
@@ -26,13 +27,17 @@ const vm = new Vue({
 
     viewBigImage: function (post) {
       if (post) {
+
+        document.getElementById('big_image').style.background = post.preview_url;
+        document.getElementById('big_image').src = post.file_url;
+        document.getElementById('big_view').hidden = false;
         this.curPost = post;
-        this.isPreview = false;
         document.body.style.overflowY = "hidden";
+
       }
       else {
-        this.isPreview = true;
         document.body.style.overflowY = "unset";
+        document.getElementById('big_view').hidden = true;
       }
       console.log(post);
 
