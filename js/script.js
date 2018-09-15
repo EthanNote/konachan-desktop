@@ -1,4 +1,4 @@
-const PostData = require('./postdata');
+const PostData = require('../js/postdata');
 
 //const postList = new PostData.PostList();
 const postListManager = new PostData.PostListManager();
