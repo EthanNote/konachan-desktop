@@ -1,5 +1,6 @@
 var fs = require('fs');
-var request = require('requestretry');
+// var request = require('requestretry');
+var request = require('request');
 
 var mergePostList = function (oldList, newList, override = true) {
 

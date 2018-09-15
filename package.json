@@ -4,7 +4,8 @@
   "description": "Konachan desktop client",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package": "electron-packager . KonachanDesktop --win --out KonachanDesktop --arch=x64 --overwrite"
   },
   "repository": "hhttps://github.com/EthanNote/konachan-desktop",
   "keywords": [
@@ -13,9 +14,10 @@
   "author": "EtanNote",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^2.0.0"
+    "electron": "^2.0.0",
+    "electron-rebuild": "^1.8.2"
   },
   "dependencies": {
-    "requestretry": "^2.0.2"
+    "request": "^2.88.0"
   }
 }
