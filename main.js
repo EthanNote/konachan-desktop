@@ -1,13 +1,16 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const electron = require('electron');
 
+const { app, BrowserWindow } = electron
+const globalShortcut = electron.globalShortcut
+const dialog = electron.dialog
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1315, height: 720})
+  mainWindow = new BrowserWindow({ width: 1315, height: 720 })
 
   // and load the index.html of the app.
   mainWindow.loadFile('html/index.html')
@@ -48,3 +51,27 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+app.on('ready', function () {
+  globalShortcut.register('F11', function () {
+    mainWindow.setFullScreen(!mainWindow.isFullScreen());
+  })
+
+  globalShortcut.register('F10', function () {
+    mainWindow.webContents.openDevTools({mode: 'detach'});
+  })
+  
+  // mainWindow.webContents.session.on('will-download',(event,item,webContents)=>{
+  
+  //   // event.preventDefault();
+  //   // //console.log('will-download'+item.getURL());
+  //   // //执行自己的下载操作
+  //   // MyDownLoad(item.getURL());
+  
+  //   console.log("DOWNLOAD EVENT");
+  //   console.log(event);
+  //   console.log(item);
+  //   console.log(webContents);
+  //   console.log("/DOWNLOAD EVENT");
+  // });
+})
+

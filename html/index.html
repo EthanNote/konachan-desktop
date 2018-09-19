@@ -127,6 +127,11 @@
       padding: 5px;
     }
 
+    .operation_icon {
+      width: 2em;
+      padding: 10px;
+    }
+
     td {
       padding: 10px;
       font-size: 1em;
@@ -134,6 +139,29 @@
 
     #big_image {
       width: 100%;
+    }
+
+    #big_image_background {
+      width: 100%;
+      background-size: cover;
+      background-clip: padding-box;
+    }
+
+    #info {
+      background-color: black;
+      color: white;
+      text-align: center;
+      position: fixed;
+      bottom: 10%;
+      left: 20%;
+      right: 20%;
+      font-size: 1.5em;
+      font-family: consolas, courier;
+      padding: 0.5em;
+    }
+
+    #return_button {
+      background: url("../img/return.png") no-repeat;
     }
   </style>
   <script>
@@ -176,10 +204,14 @@
         </div>
       </div>
     </div>
-
+    <div v-show="isLoading" id="loading"></div>
     <div id="big_view" hidden>
       <div class="post_info">
-        <table>
+        <div style="float:left">
+          <a v-on:click="viewBigImage()"> <img class="operation_icon" src="../img/return.png"> </a>
+          <a v-bind:href="curPost.file_url" download> <img class="operation_icon" src="../img/download.png"> </a>
+        </div>
+        <table style="clear:both">
           <tr>
             <td>ID</td>
             <td>{{ curPost.id }}</td>
@@ -198,34 +230,20 @@
           </tr>
         </table>
 
-        <button v-on:click="viewBigImage()">Return</button>
       </div>
       <div id="big_image_frame">
-        <img id="big_image">
+        <div style="width:100%" id="big_image_background">
+          <img id="big_image">
+        </div>
       </div>
     </div>
-    <div v-show="isLoading" id="loading"></div>
+
+    <div id=info v-html="infoText" v-show="isInfoShow">少女祈祷中...</div>
   </div>
   <div id="more"></div>
-  <script>
-    var opts = {
-      lines: 12, // The number of lines to draw
-      length: 10, // The length of each line
-      width: 4, // The line thickness
-      radius: 16, // The radius of the inner circle
-      corners: 1, // Corner roundness (0..1)
-      rotate: 0, // The rotation offset
-      color: '#fff', // #rgb or #rrggbb
-      speed: 1, // Rounds per second
-      trail: 60, // Afterglow percentage
-      shadow: false, // Whether to render a shadow
-      hwaccel: false, // Whether to use hardware acceleration
-      className: 'spinner', // The CSS class to assign to the spinner
-      zIndex: 2e9, // The z-index (defaults to 2000000000)
-    };
-    var target = document.getElementById('loading');
-    var spinner = new Spinner(opts).spin(target);
-  </script>
+  <!-- <script>
+    document.getElementById("big_preview_div").style.width=document.getElementById("big_image_frame").innerWidth;
+  </script> -->
   <script src="../js/script.js"></script>
 
 </body>

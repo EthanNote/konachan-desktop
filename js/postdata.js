@@ -1,5 +1,4 @@
 var fs = require('fs');
-// var request = require('requestretry');
 var request = require('request');
 
 var mergePostList = function (oldList, newList, override = true) {
@@ -43,6 +42,11 @@ var PostList = function () {
 }
 
 PostList.prototype.getNextBatch = function () {
+
+  if (typeof this.retryCount === 'undefined') {
+    this.retryCount = 0;
+  }
+
   if (this.pending >= 0) {
     console.warn("Pending busy");
     return;
@@ -61,11 +65,11 @@ PostList.prototype.getNextBatch = function () {
   console.log("URL: ", url);
   request({
     url: url,
-    timeout: 5000,
-    maxAttempts: self.retrys,
-  }, function (error, response, body) {
+    timeout: 10000,
+  }, (error, response, body) => {
     self.pending = -1;
     if (!error && response.statusCode == 200) {
+      self.retryCount = 0;
       self.curPage = nextPage;
       var newList = JSON.parse(body);
       if (self.oldList.length <= 0) {
@@ -85,8 +89,22 @@ PostList.prototype.getNextBatch = function () {
       }
     }
     else {
-      console.warn("ERROR ", error, response, body);
+      console.warn("ERROR");
+      console.log(error);
+      console.log(response);
+      console.log(body);
+      console.warn("/ERROR");
       self.onUpdate()
+      if (self.retryCount < self.retrys) {
+        self.retryCount++;
+        vm.showInfo(`Unable to fetch data from konachan.net, retry (${self.retryCount})`);
+        console.log(`Retry (${self.retryCount})`);
+        window.setTimeout(() => { self.getNextBatch() }, 1);
+      }
+      else {
+        vm.showInfo('Unable to fetch data from konachan.net');
+        self.retryCount = 0;
+      }
     }
 
   })

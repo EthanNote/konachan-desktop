@@ -21,14 +21,43 @@ const vm = new Vue({
       id: -1,
       author: "null",
       tags: ""
-    }
+    },
+
+    isInfoShow: false,
+    infoText: ""
+
   },
   methods: {
+
+    showInfo: function (text, timeout = 5000) {
+      this.infoText = text;
+      this.isInfoShow = true;
+      var self = this;
+      if (typeof this.infoId == 'undefined') {
+        this.infoId = 0;
+      }
+      else {
+        this.infoId++;
+      }
+      //var curInfoId = this.infoId * 1;
+      (function (index) {
+        window.setTimeout(() => {
+          if (self.infoId == index) {
+            self.hideInfo();
+          }
+        }, timeout);
+      })(self.infoId);
+    },
+
+    hideInfo: function () {
+      this.isInfoShow = false;
+    },
 
     viewBigImage: function (post) {
       if (post) {
 
-        document.getElementById('big_image').style.background = post.preview_url;
+        // document.getElementById('big_image').style.background = post.preview_url;
+        document.getElementById('big_image_background').style.backgroundImage = `url(${post.preview_url})`;
         document.getElementById('big_image').src = post.file_url;
         document.getElementById('big_view').hidden = false;
         this.curPost = post;
@@ -45,6 +74,17 @@ const vm = new Vue({
   },
 
   computed: {
+
+    // bigPreviewStyle: function () {
+    //   return {
+    //     position: "absolute",
+    //     "z-index": -1,
+    //     width: `${document.getElementById("big_image_frame").clientWidth - 10}px`
+
+    //   }
+
+    // },
+
     getTags: function () {
       if (this.curPost && this.curPost.tags) {
         return this.curPost.tags.replace(/ /g, '<br>');
@@ -127,12 +167,16 @@ var listener = new KeyStateListener(function (state) {
   console.log(state);
   if (!state['Control'] && state['Alt'] && state['=']) {
     vm._data.frameWidth += 20;
+    autoUpdateRow();
   }
   if (!state['Control'] && state['Alt'] && state['-']) {
     vm._data.frameWidth -= 20;
+    autoUpdateRow();
   }
-  autoUpdateRow()
 
+  if (!document.getElementById('big_view').hidden && state['Escape']) {
+    vm.viewBigImage(null);
+  }
 })
 
 
@@ -199,21 +243,19 @@ window.onload = function () {
   //postListManager.current.getCachedPosts(cache);
 
   var opts = {
-    lines: 9, // The number of lines to draw
-    length: 7, // The length of each line
-    width: 2, // The line thickness
-    radius: 14, // The radius of the inner circle
-    corners: 0, // Corner roundness (0..1)
+    lines: 12, // The number of lines to draw
+    length: 10, // The length of each line
+    width: 4, // The line thickness
+    radius: 16, // The radius of the inner circle
+    corners: 1, // Corner roundness (0..1)
     rotate: 0, // The rotation offset
-    color: '#000', // #rgb or #rrggbb
-    speed: 1.1, // Rounds per second
-    trail: 100, // Afterglow percentage
-    shadow: true, // Whether to render a shadow
-    hwaccel: true, // Whether to use hardware acceleration
+    color: '#fff', // #rgb or #rrggbb
+    speed: 1, // Rounds per second
+    trail: 60, // Afterglow percentage
+    shadow: false, // Whether to render a shadow
+    hwaccel: false, // Whether to use hardware acceleration
     className: 'spinner', // The CSS class to assign to the spinner
-    zIndex: 2e9, // The z-index (defaults to 2000000000)
-    top: 'auto', // Top position relative to parent in px
-    left: 'auto' // Left position relative to parent in px
+    zIndex: 1, // The z-index (defaults to 2000000000)
   };
   var target = document.getElementById('loading');
   var spinner = new Spinner(opts).spin(target);
